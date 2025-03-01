@@ -4,10 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 public class User {
-
     private String name;
-    private String password;
-    private String hashedPassword;
+    private String password;  // This should not be stored as plain text
+    private String hashPassword; // Store the hashed password instead
     private String userId;
     private List<Ticket> ticketsBooked;
     private String source;
@@ -15,17 +14,20 @@ public class User {
     private Date dateOfTravel;
     private List<Train> train;
 
-    public User(String userId, String password, String hashedPassword){
+    // Constructor
+    public User(String name, String userId, String hashPassword) {
+        this.name = name;
         this.userId = userId;
-
+        this.hashPassword = hashPassword;
     }
 
-
-    public String getUserId(){
+    // Getter for userId
+    public String getUserId() {
         return userId;
     }
 
-    public String getHashedPassword(){
-        return hashedPassword;
+    // Getter for hashPassword
+    public String getHashPassword() {
+        return hashPassword;
     }
 }
