@@ -23,6 +23,8 @@ dependencies {
     implementation libs.guava
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.6'
     implementation 'org.mindrot:jbcrypt:0.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -35,4 +37,11 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'org.example.App'
+}
+
+test {
+    useJUnitPlatform() // ✅ This ensures JUnit 5 tests run
+    testLogging {
+        events "passed", "failed", "skipped"
+    }
 }
