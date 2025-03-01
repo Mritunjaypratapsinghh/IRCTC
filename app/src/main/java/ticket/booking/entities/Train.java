@@ -11,7 +11,7 @@ public class Train {
     private Date departTime;
     private Date arrivalTime;
     private List<List<Boolean>> seats;
-    private Map<String, Time>  stationTime;
+    private Map<String, Time> stationTime;
     private List<String> stations;
 
 
