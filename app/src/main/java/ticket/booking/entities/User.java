@@ -15,5 +15,17 @@ public class User {
     private Date dateOfTravel;
     private List<Train> train;
 
+    public User(String userId, String password, String hashedPassword){
+        this.userId = userId;
 
+    }
+
+
+    public String getUserId(){
+        return userId;
+    }
+
+    public String getHashedPassword(){
+        return hashedPassword;
+    }
 }
