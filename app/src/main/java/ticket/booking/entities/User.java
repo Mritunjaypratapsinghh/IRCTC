@@ -1,6 +1,8 @@
 package ticket.booking.entities;
+
 import java.util.Date;
 import java.util.List;
+
 public class User {
 
     private String name;
@@ -12,7 +14,6 @@ public class User {
     private String destination;
     private Date dateOfTravel;
     private List<Train> train;
-
 
 
 }
