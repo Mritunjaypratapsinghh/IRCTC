@@ -47,4 +47,27 @@ public class User {
     }
 
 
+    public List<Ticket> getTicketsBooked(){
+        return ticketsBooked;
+    }
+
+    public void printTickets(){
+        for( int i =0; i<ticketsBooked.size(); i++){
+            System.out.println(ticketsBooked.get(i).getTicketInfo());
+        }
+    }
+
+    public void setName(String name){
+        this.name = name;
+
+    }
+
+    public void setUserId(String userId){
+        this.userId = userId;
+    }
+
+    public void setTicketsBooked(List<Ticket> ticketsBooked){
+        this.ticketsBooked = ticketsBooked;
+    }
+
 }
