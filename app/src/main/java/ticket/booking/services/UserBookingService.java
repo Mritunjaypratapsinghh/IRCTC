@@ -2,7 +2,7 @@ package ticket.booking.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.j2objc.annotations.UsedByReflection;
+import ticket.booking.entities.Train;
 import ticket.booking.entities.User;
 import ticket.booking.utils.PasswordUtil;
 
@@ -10,72 +10,97 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserBookingService {
-    private User user;
-    private List<User> userList;
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    private static final String USERS_PATH = "/home/mritunjay/Desktop/IRCTC/app/src/main/java/ticket/booking/localDb/users.json";
-    private static final String TRAINS_PATH = "../localDb/trains.json";
+    private List<User> userList;
+    private static final String USERS_PATH = "app/src/main/java/ticket/booking/localDb/users.json";
 
     public UserBookingService() throws IOException {
-        File usersFile = new File(USERS_PATH);
-        if (usersFile.exists()) {
-            userList = objectMapper.readValue(usersFile, new TypeReference<List<User>>() {});
-        } else {
+        loadUsers();
+    }
+
+    private void loadUsers() throws IOException {
+        File file = new File(USERS_PATH);
+        if (!file.exists()) {
             userList = new ArrayList<>();
+        } else {
+            userList = objectMapper.readValue(file, new TypeReference<List<User>>() {});
         }
     }
 
-
-    public Boolean signUp(String name, String userId, String rawPassword) {
+    public boolean signUp(User user) {
         try {
-            String hashedPassword = PasswordUtil.hashPassword(rawPassword);
-            User user = new User(name,userId,hashedPassword);
-
-            //Check if user already exist
-            for(User existingUser: userList){
-
-                if(existingUser.getUserId().equals(userId)){
-                    return false;
-                }
-            }
-
-
             userList.add(user);
             saveUserListToFile();
             return true;
-
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
-
     }
 
-    public Boolean signIn(String userId, String rawPassword) {
-        for (User existingUser : userList) {
-            if (existingUser.getUserId().equals(userId) && PasswordUtil.verifyPassword(rawPassword,existingUser.getHashPassword())){
-                return true;
-            }
-
-        }
-        return false;
+    public boolean signIn(User user) {
+        return userList.stream().anyMatch(u ->
+                u.getName().equals(user.getName()) && PasswordUtil.verifyPassword(user.getPassword(), u.getHashPassword())
+        );
     }
 
-
-    void saveUserListToFile() {
+    private void saveUserListToFile() {
         try {
-            File file = new File("../localDb/users.json");
-            file.getParentFile().mkdirs(); // Ensure directory exists
-            if (!file.exists()) file.createNewFile(); // Ensure file exists
-
-            // Your existing file writing logic...
+            objectMapper.writeValue(new File(USERS_PATH), userList);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public void fetchBookings(User loggedInUser) {
+        userList.stream()
+                .filter(u -> u.getName().equals(loggedInUser.getName()))
+                .findFirst()
+                .ifPresent(User::printTickets);
+    }
 
-    }}
+    public boolean cancelBooking(User user, String ticketId) {
+        boolean removed = user.getTicketsBooked().removeIf(ticket -> ticket.getTickedId().equals(ticketId));
+        if (removed) {
+            saveUserListToFile();
+            System.out.println("Ticket with ID " + ticketId + " has been canceled.");
+            return true;
+        } else {
+            System.out.println("No ticket found with ID " + ticketId);
+            return false;
+        }
+    }
 
+    public List<Train> getTrain(String source, String destination) {
+        try {
+            TrainService trainService = new TrainService();
+            return trainService.searchTrains(source, destination);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public Boolean bookTrainSeat(Train train, int row, int seat) {
+        try{
+            TrainService trainService = new TrainService();
+            List<List<Integer>> seats = train.getSeats();
+            if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
+                if (seats.get(row).get(seat) == 0) {
+                    seats.get(row).set(seat, 1);
+                    train.setSeats(seats);
+                    trainService.addTrain(train);
+                    return true; // Booking successful
+                } else {
+                    return false; // Seat is already booked
+                }
+            } else {
+                return false; // Invalid row or seat index
+            }
+        }catch (IOException ex){
+            return Boolean.FALSE;
+        }
+    }
+}

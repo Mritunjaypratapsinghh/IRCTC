@@ -33,11 +33,16 @@ public class Train {
         return this.seats;
     }
 
+    public void setSeats(List<List<Integer>> seats){
+        this.seats = seats;
+    }
+
+
     public String getTrainId(){
         return trainId;
     }
 
-    public Map<String,String> getStationTime(){
+    public Map<String,String> getStationTimes(){
         return stationTime;
     }
 

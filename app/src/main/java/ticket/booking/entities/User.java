@@ -9,6 +9,7 @@ import java.util.List;
 public class User {
     @JsonProperty("name")
     private String name;
+    private String password;
     @JsonProperty("hashed_password")
     private String hashPassword; // Store the hashed password instead
     @JsonProperty("user_id")
@@ -25,11 +26,14 @@ public class User {
     }
 
     // Constructor
-    public User(String name, String userId, String hashPassword) {
+    public User(String name, String password, String hashPassword,List<Ticket>ticketsBooked,String userId) {
         this.name = name;
-        this.userId = userId;
+        this.password = password;
         this.hashPassword = hashPassword;
+        this.ticketsBooked = ticketsBooked;
+        this.userId = userId;
     }
+
 
     // Getter for userId
     public String getUserId() {
@@ -70,4 +74,11 @@ public class User {
         this.ticketsBooked = ticketsBooked;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getPassword(){
+        return password;
+    }
 }

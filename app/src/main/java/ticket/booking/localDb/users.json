@@ -1,7 +1,26 @@
 [
   {
-    "user_id": "abcdef",
+    "password": null,
     "name": "Mritunjay Pratap Singh",
-    "hashed_password": "12345"
+    "hashed_password": "12345",
+    "user_id": "abcdef",
+    "tickets_booked": null,
+    "date_of_travel": null
+  },
+  {
+    "password": "hritik",
+    "name": "hritik",
+    "hashed_password": "$2a$12$PGPnfz3zQx/us7I2eDVvYOT/ch7u79KtbifYnhPfbnzILGpicdSY2",
+    "user_id": "aa3eda63-ee8c-4d34-98c9-1c0987b4dd66",
+    "tickets_booked": [],
+    "date_of_travel": null
+  },
+  {
+    "password": "abhigyan",
+    "name": "abhigyan",
+    "hashed_password": "$2a$12$dR8vH0bXWi7pH6wZixYh6.zzYebcm1M.kEkni7.6d8sQktjH4h8cS",
+    "user_id": "ba7db183-5cdc-41bd-b4f3-9d46d4a91fd6",
+    "tickets_booked": [],
+    "date_of_travel": null
   }
 ]
